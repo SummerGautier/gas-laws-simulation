@@ -58,8 +58,6 @@ public class IdealGasAnimationService extends ParticleAnimationService {
             Circle circle = circlesIterator.next();
             KeyValue kVMoveX = new KeyValue(circle.centerXProperty(), random.nextInt((int) animationPane.getWidth()) - circleRadius);
             KeyValue kVRotate = new KeyValue(circle.rotateProperty(), random.nextInt((int) animationPane.getHeight()) - circleRadius);
-/*            KeyValue kVArcHeight = new KeyValue(circle.radiusProperty(), 60);
-            KeyValue kVArcWidth = new KeyValue(circle.radiusProperty(), 60);*/
 
             KeyFrame keyFrame = new KeyFrame(Duration.millis(random.nextInt(2000) + 2000), kVMoveX, kVRotate);
 
