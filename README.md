@@ -2,4 +2,6 @@
 ## Description
 This Java program runs simulations of particles in an enclosed spaced, taking into acount volume, element type, pressure, and weight of atomic particles.
 ## Running The Simulation
-Download the project src files, open in an IDE and run Main.java
+Download the project zip, extract and open it in an IDE and run Main.java
+<br>**OR**</br>
+Clone this repository, open the local files in an IDE and run Main.java
