@@ -8,9 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
 import models.ParticleSystem;
-import services.IdealGasAnimationService;
-import services.ParticleAnimationService;
-import services.VanDerWaalGasAnimationService;
+import animation.ParticleAnimationService;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,7 +23,7 @@ public class DashboardFXMLController implements Initializable {
 
     public DashboardFXMLController(){
         //initialize singletons here
-        this.particleAnimationService = IdealGasAnimationService.getInstance();
+        this.particleAnimationService = particleAnimationService.getInstance();
     }
 
     @Override
@@ -82,7 +80,7 @@ public class DashboardFXMLController implements Initializable {
     private class enableVanDerWaalHandler implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent e){
-            particleAnimationService = (enableVanderWaalCheckBox.isSelected())? VanDerWaalGasAnimationService.getInstance() : IdealGasAnimationService.getInstance();
+            //particleAnimationService = (enableVanderWaalCheckBox.isSelected())? VanDerWaalGasAnimationService.getInstance() : IdealGasAnimationService.getInstance();
         }
     }
 }
