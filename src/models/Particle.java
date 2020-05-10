@@ -1,6 +1,8 @@
 package models;
 
-public class Particle {
+import javafx.scene.shape.Circle;
+
+public class Particle extends Circle {
     private double weight;
     private int xPos;
     private int yPos;
@@ -11,10 +13,9 @@ public class Particle {
      * @param startXPos, starting x position
      * @param startYPos, starting y position
      */
-    public Particle(double weight, int startXPos, int startYPos){
-        this.weight = weight;
-        this.xPos = startXPos;
-        this.yPos = startYPos;
+    public Particle(int startXPos, int startYPos, double weight){
+        super(startXPos, startYPos, weight);
+        this.weight = this.getRadius();
     }
 
     /**
@@ -22,65 +23,15 @@ public class Particle {
      * @param weight, size of particle in amu
      */
     public Particle(double weight){
-        this.weight = weight;
-        this.xPos = 0;
-        this.yPos = 0;
+        super( 0 + 2 * weight, 0 + 2 * weight, weight);
+        this.weight = this.getRadius();
     }
     /**
      * instantiate a new particle with default weight (1 amu) and default position (0,0)
      */
     public Particle(){
-        this.weight = 1;
-        this.xPos = 0;
-        this.yPos = 0;
-    }
-
-    /**
-     * weight of particle
-     * @return
-     */
-    public double getWeight() {
-        return weight;
-    }
-
-    /**
-     * current x position of particle
-     * @return
-     */
-    public int getxPos() {
-        return xPos;
-    }
-
-    /**
-     * current y position of particle
-     * @return
-     */
-    public int getyPos() {
-        return yPos;
-    }
-
-    /**
-     * set weight of particle
-     * @param weight
-     */
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    /**
-     * set y position of particle
-     * @param xPos
-     */
-    public void setxPos(int xPos) {
-        this.xPos = xPos;
-    }
-
-    /**
-     * set y position of particle
-     * @param yPos
-     */
-    public void setyPos(int yPos) {
-        this.yPos = yPos;
+        super(10, 10, 5);
+        this.weight = this.getRadius();
     }
 
     /**

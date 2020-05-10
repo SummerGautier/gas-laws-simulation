@@ -43,23 +43,25 @@ public class IdealGasAnimationService extends ParticleAnimationService {
      * @param animationPane, the pane where the animation will be drawn
      */
     public void animate(ParticleSystem particleSystem, Pane animationPane){
-        ArrayList<Circle> circlesList = new ArrayList<Circle>();
+        ArrayList<Particle> particles = particleSystem.getParticles();
         Random random = new Random();
-        int circleRadius = 5;
-        //init particles
-        while(circlesList.size() <= 50) {
-            int startX = random.nextInt((int) animationPane.getWidth()) + circleRadius;
-            int startY = random.nextInt((int) animationPane.getHeight()) +  circleRadius;
-            Circle circle = new Circle(startX, startY, circleRadius, Color.DARKRED);
-            HashMap<String, Integer> circleProperties = new HashMap<String, Integer>();
+        
+        ListIterator<Particle> particleIterator = particles.listIterator();
+        //init particle pos, speed, color etc.
+        while(particleIterator.hasNext()) {
+            Particle particle = particleIterator.next();
+            particle.setFill(Color.RED);
+            particle.setCenterX(random.nextInt((int)animationPane.getWidth()) + particle.getRadius());
+
+            particle.setCenterY((int) random.nextInt((int) animationPane.getHeight()) + particle.getRadius());
+            HashMap<String, Integer> speedProperties = new HashMap<String, Integer>();
             int speedInit = random.nextInt(5) + 1;
-            circleProperties.put("speedX", speedInit);
-            circleProperties.put("speedY", speedInit);
-            circle.getProperties().putAll(circleProperties);
-            circle.setStroke(Color.RED);
-            circlesList.add(circle);
+            speedProperties.put("speedX", speedInit);
+            speedProperties.put("speedY", speedInit);
+            particle.getProperties().putAll(speedProperties);
+            particle.setStroke(Color.RED);
         }
-        animationPane.getChildren().addAll(circlesList);
+        animationPane.getChildren().addAll(particles);
 
         //set game loop to run continously (unless we call timeline.stop())
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -77,23 +79,23 @@ public class IdealGasAnimationService extends ParticleAnimationService {
                     @Override
                     public void handle(ActionEvent event) {
                         //updating particle position
-                        ListIterator<Circle> circlesIterator = circlesList.listIterator();
-                        while(circlesIterator.hasNext()) {
-                            Circle circle = circlesIterator.next();
+                        ListIterator<Particle> particleIterator = particles.listIterator();
+                        while(particleIterator.hasNext()) {
+                            Particle particle = particleIterator.next();
 
                             //bounds detection
-                            if((circle.getCenterX() > animationPane.getWidth() - (circleRadius * 2)) || (circle.getCenterX() <= circleRadius)){
-                                circle.getProperties().replace("speedX", (int) circle.getProperties().get("speedX") * -1);
+                            if((particle.getCenterX() > animationPane.getWidth() - (particle.getRadius() * 2)) || (particle.getCenterX() <= particle.getRadius())){
+                                particle.getProperties().replace("speedX", (int) particle.getProperties().get("speedX") * -1);
                             }
-                            if((circle.getCenterY() > animationPane.getHeight() - (circleRadius * 2)) || (circle.getCenterY() <= circleRadius)){
-                                circle.getProperties().replace("speedY", (int) circle.getProperties().get("speedY") * -1);
+                            if((particle.getCenterY() > animationPane.getHeight() - (particle.getRadius() * 2)) || (particle.getCenterY() <= particle.getRadius())){
+                                particle.getProperties().replace("speedY", (int) particle.getProperties().get("speedY") * -1);
                             }
 
-                            int speedX = (int) circle.getProperties().get("speedX");
-                            int speedY = (int) circle.getProperties().get("speedY");
+                            int speedX = (int) particle.getProperties().get("speedX");
+                            int speedY = (int) particle.getProperties().get("speedY");
 
-                            circle.setCenterX(circle.getCenterX() + speedX);
-                            circle.setCenterY(circle.getCenterY() + speedY);
+                            particle.setCenterX(particle.getCenterX() + speedX);
+                            particle.setCenterY(particle.getCenterY() + speedY);
                         }
                     }
                 }

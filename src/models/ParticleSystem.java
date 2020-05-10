@@ -20,36 +20,6 @@ public class ParticleSystem {
      * The minimum of: the max allowed particles OR the number of particles requested
      * All Particles start at the specified x and y position
      * @param numberOfParticles, the number of system particles requested
-     * @param particleWeight, the size/weight of reach particle (in amu)
-     * @param xPos, the starting x position of the particle system
-     * @param yPos, the starting y positio of the particle system
-     */
-    public ParticleSystem(int numberOfParticles, int particleWeight, int xPos, int yPos){
-        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
-        //add the minimum of the maximum allows particles OR the number of particles requested.
-        for (int i = 0; i < min(numberOfParticles, MAX_PARTICLES); i++) {
-            this.particles.add(new Particle(particleWeight, xPos, yPos));
-        }
-    }
-    /**
-     * instantiates a Particle system with
-     * The minimum of: the max allowed particles OR the number of particles requested
-     * @param numberOfParticles, the number of system particles requested
-     * @param particleWeight, the size/weight of each particle (in amu)
-     * @return a particle system with the
-     */
-    public ParticleSystem(int numberOfParticles, int particleWeight){
-        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
-        //add the minimum of the maximum allows particles OR the number of particles requested.
-        for (int i = 0; i < min(numberOfParticles, MAX_PARTICLES); i++) {
-            this.particles.add(new Particle(particleWeight));
-        }
-    }
-
-    /**
-     * instantiate a particle system with
-     * the minimum of: the max allowed particles OR the number of particles requested
-     * @param numberOfParticles, the number of system particles requested
      */
     public ParticleSystem(int numberOfParticles){
         this.particles = new ArrayList<Particle>(MAX_PARTICLES);
@@ -59,6 +29,10 @@ public class ParticleSystem {
         }
     }
 
+    public ParticleSystem(ArrayList<Particle> newParticles){
+        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
+        this.addAll(newParticles);
+    }
     /**
      * instantiates a Particle System with the max number of particles
      */
@@ -142,8 +116,20 @@ public class ParticleSystem {
      * adds a new particle to the particle system
      * @param particle, the particle object to add to this system
      */
-    public void addParticle(Particle particle){
-        this.particles.add(particle);
+    public void add(Particle particle){
+        if(this.particles.size() < MAX_PARTICLES){
+            particles.add(particle);
+        }
+    }
+
+    /**
+     * adds a collection of particles to the particle system
+     * @param newParticles
+     */
+    public void addAll(ArrayList<Particle> newParticles){
+        if(this.particles.size() + newParticles.size() <= MAX_PARTICLES){
+            particles.addAll(newParticles);
+        }
     }
 
     /**
