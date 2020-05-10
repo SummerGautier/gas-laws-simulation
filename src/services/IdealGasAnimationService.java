@@ -30,7 +30,6 @@ public class IdealGasAnimationService extends ParticleAnimationService {
      */
     public static IdealGasAnimationService getInstance(){
         //if animation service was already instantiated, return existing instance
-        //or else return a new instance of the gas animation service
         if(idealGasAnimationService == null) {
             idealGasAnimationService = new IdealGasAnimationService();
         }
@@ -43,31 +42,24 @@ public class IdealGasAnimationService extends ParticleAnimationService {
      * @param animationPane, the pane where the animation will be drawn
      */
     public void animate(ParticleSystem particleSystem, Pane animationPane){
-        ArrayList<Particle> particles = particleSystem.getParticles();
         Random random = new Random();
         
-        ListIterator<Particle> particleIterator = particles.listIterator();
+        ListIterator<Particle> particleIterator = particleSystem.getParticles().listIterator();
         //init particle pos, speed, color etc.
         while(particleIterator.hasNext()) {
             Particle particle = particleIterator.next();
             particle.setFill(Color.RED);
-            particle.setCenterX(random.nextInt((int)animationPane.getWidth()) + particle.getRadius());
-
-            particle.setCenterY((int) random.nextInt((int) animationPane.getHeight()) + particle.getRadius());
+            particle.setXPos(random.nextInt((int)animationPane.getWidth()));
+            particle.setYPos((int) random.nextInt((int) animationPane.getHeight()));
             HashMap<String, Integer> speedProperties = new HashMap<String, Integer>();
-            int speedInit = random.nextInt(5) + 1;
-            speedProperties.put("speedX", speedInit);
-            speedProperties.put("speedY", speedInit);
-            particle.getProperties().putAll(speedProperties);
-            particle.setStroke(Color.RED);
+            particle.setVelocity(random.nextInt(5) + 1);
+
         }
-        animationPane.getChildren().addAll(particles);
+
+        animationPane.getChildren().addAll(particleSystem.getParticles());
 
         //set game loop to run continously (unless we call timeline.stop())
         timeline.setCycleCount(Timeline.INDEFINITE);
-
-        //animation start time
-        final long timeStart = System.currentTimeMillis();
 
         /*
          * Particle Updates Calculated Every 60 seconds In This KeyFrame
@@ -79,23 +71,20 @@ public class IdealGasAnimationService extends ParticleAnimationService {
                     @Override
                     public void handle(ActionEvent event) {
                         //updating particle position
-                        ListIterator<Particle> particleIterator = particles.listIterator();
+                        ListIterator<Particle> particleIterator = particleSystem.getParticles().listIterator();
                         while(particleIterator.hasNext()) {
                             Particle particle = particleIterator.next();
 
                             //bounds detection
-                            if((particle.getCenterX() > animationPane.getWidth() - (particle.getRadius() * 2)) || (particle.getCenterX() <= particle.getRadius())){
-                                particle.getProperties().replace("speedX", (int) particle.getProperties().get("speedX") * -1);
+                            if((particle.getXPos() > animationPane.getWidth() - particle.getWidth()) || (particle.getXPos() <= 0)){
+                                particle.setXVelocity(particle.getXVelocity() * -1);
                             }
-                            if((particle.getCenterY() > animationPane.getHeight() - (particle.getRadius() * 2)) || (particle.getCenterY() <= particle.getRadius())){
-                                particle.getProperties().replace("speedY", (int) particle.getProperties().get("speedY") * -1);
+                            if((particle.getYPos() > animationPane.getHeight() - particle.getHeight()) || (particle.getYPos() <= 0)){
+                                particle.setYVelocity(particle.getYVelocity() * -1);
                             }
 
-                            int speedX = (int) particle.getProperties().get("speedX");
-                            int speedY = (int) particle.getProperties().get("speedY");
-
-                            particle.setCenterX(particle.getCenterX() + speedX);
-                            particle.setCenterY(particle.getCenterY() + speedY);
+                            particle.setXPos(particle.getXPos() + particle.getXVelocity());
+                            particle.setYPos(particle.getYPos() + particle.getYVelocity());
                         }
                     }
                 }

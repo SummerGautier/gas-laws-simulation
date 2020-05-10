@@ -15,6 +15,8 @@ public class ParticleSystem {
 
     private final int MAX_PARTICLES = 500;
 
+
+    /* CONSTRUCTORS */
     /**
      * instantiates a Particle system with
      * The minimum of: the max allowed particles OR the number of particles requested
@@ -28,7 +30,10 @@ public class ParticleSystem {
             this.particles.add(new Particle());
         }
     }
-
+    /**
+     * insantiates a particle system with the specified collection of particles
+     * @param newParticles, a collection of particles to be injected into the system
+     */
     public ParticleSystem(ArrayList<Particle> newParticles){
         this.particles = new ArrayList<Particle>(MAX_PARTICLES);
         this.addAll(newParticles);
@@ -40,14 +45,14 @@ public class ParticleSystem {
         this.particles = new ArrayList<Particle>(MAX_PARTICLES);
     }
 
+
+    /* GET METHODS */
     /**
-     * array list of particles in the system
-     * @return
+     * @return an array list of particles in the system
      */
     public ArrayList<Particle> getParticles() {
         return particles;
     }
-
     /**
      * average kinetic speed of particles in the system
      * @return
@@ -55,7 +60,6 @@ public class ParticleSystem {
     public double getAvgKineticSpeed() {
         return avgKineticSpeed;
     }
-
     /**
      * system pressure (in atmospheres)
      * @return
@@ -63,7 +67,6 @@ public class ParticleSystem {
     public double getPressure() {
         return pressure;
     }
-
     /**
      * system tempreature (in degrees Kelvin)
      * @return
@@ -71,7 +74,6 @@ public class ParticleSystem {
     public double getTemperature() {
         return temperature;
     }
-
     /**
      * system volume (in Liters)
      * @return
@@ -79,7 +81,6 @@ public class ParticleSystem {
     public double getVolume() {
         return volume;
     }
-
     /**
      * total maximum allowed particles
      * @return
@@ -88,6 +89,8 @@ public class ParticleSystem {
         return MAX_PARTICLES;
     }
 
+
+    /* UPDATE METHODS */
     /**
      * update the pressure of the system
      * @param pressure, in atmospheres
@@ -95,7 +98,6 @@ public class ParticleSystem {
     public void updatePressure(double pressure) {
         this.pressure = pressure;
     }
-
     /**
      * update the temperature of the system
      * @param temperature, in degrees Kelvin
@@ -103,7 +105,6 @@ public class ParticleSystem {
     public void updateTemperature(double temperature) {
         this.temperature = temperature;
     }
-
     /**
      * update the volume of the system
      * @param volume, in Liters
@@ -112,6 +113,8 @@ public class ParticleSystem {
         this.volume = volume;
     }
 
+
+    /* BUSINESS METHODS */
     /**
      * adds a new particle to the particle system
      * @param particle, the particle object to add to this system
@@ -121,7 +124,6 @@ public class ParticleSystem {
             particles.add(particle);
         }
     }
-
     /**
      * adds a collection of particles to the particle system
      * @param newParticles
@@ -131,7 +133,6 @@ public class ParticleSystem {
             particles.addAll(newParticles);
         }
     }
-
     /**
      * removes the specified number of particles
      * @param numberOfParticlesToRemove, total number of particles to be removed
@@ -145,6 +146,8 @@ public class ParticleSystem {
         }
     }
 
+
+    /* STRING METHODS */
     /**
      * JSON of all particles in the system and their data
      * @return
@@ -156,8 +159,6 @@ public class ParticleSystem {
                         .collect(Collectors.joining(",\n\t"))
                 + "\n}";
     }
-
-
     /**
      * a JSON over general Particle System Info
      * @return
