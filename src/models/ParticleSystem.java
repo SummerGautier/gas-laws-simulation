@@ -1,7 +1,11 @@
 package models;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.min;
@@ -13,7 +17,11 @@ public class ParticleSystem {
     private double pressure;
     private double avgKineticSpeed;
 
+    private Color color = Color.RED;
+    private ListIterator<Particle> particleIterator;
+
     private final int MAX_PARTICLES = 500;
+    private final Random random = new Random();
 
 
     /* CONSTRUCTORS */
@@ -43,6 +51,60 @@ public class ParticleSystem {
      */
     public ParticleSystem(){
         this.particles = new ArrayList<Particle>(MAX_PARTICLES);
+    }
+
+
+    /* INIT METHODS */
+    /**
+     * initialize particles in random positions
+     */
+    public void init(double xBounds, double yBounds){
+        //init particle pos, speed, color etc.
+        for(Particle particle : this.particles) {
+            particle.setColor(this.color);
+            particle.setXPos(random.nextInt((int)xBounds));
+            particle.setYPos((int) random.nextInt((int)yBounds));
+            particle.setVelocity(1);
+
+        }
+    }
+    /**
+     * intialize particles at specified starting position
+     * @param x, x position
+     * @param y, y position
+     */
+    public void init(double xBounds, double yBounds, double x, double y){
+        x = (x > xBounds || x < 0)? xBounds/2 : x;
+        y = (y > yBounds || y < 0)? yBounds/2 : y;
+        //init particle pos, speed, color etc.
+        for(Particle particle : this.particles) {
+            particle.setColor(this.color);
+            particle.setXPos(x);
+            particle.setYPos(y);
+            particle.setVelocity(1);
+
+        }
+    }
+    /**
+     * initliaze particles at specified position(s)
+     * @param positions, a collection of particle positions
+     */
+    public void init(HashMap<Integer, HashMap<Double,Double>> positions){
+        particleIterator = this.getParticles().listIterator();
+        while(particleIterator.hasNext()) {
+            //get particle position from collection
+            HashMap<Double,Double> position = positions.get(particleIterator.nextIndex());
+            double x = position.get(0);
+            double y = position.get(1);
+
+            //set particle data
+            Particle particle = particleIterator.next();
+            particle.setColor(this.color);
+            particle.setXPos(x);
+            particle.setYPos(y);
+            particle.setVelocity(1);
+
+        }
     }
 
 
@@ -111,6 +173,26 @@ public class ParticleSystem {
      */
     public void updateVolume(double volume) {
         this.volume = volume;
+    }
+
+    /**
+     * update position of particles
+     * @param xBounds, max x boundary of animation pane
+     * @param yBounds, max y boundary of animation pane
+     */
+    public void updateParticlePositions(double xBounds, double yBounds){
+        for(Particle particle : this.particles) {
+            //bounds detection
+            if((particle.getXPos() > xBounds - particle.getWidth()) || (particle.getXPos() <= 0)){
+                particle.setXVelocity(particle.getXVelocity() * -1);
+            }
+            if((particle.getYPos() > yBounds - particle.getHeight()) || (particle.getYPos() <= 0)){
+                particle.setYVelocity(particle.getYVelocity() * -1);
+            }
+
+            particle.setXPos(particle.getXPos() + particle.getXVelocity());
+            particle.setYPos(particle.getYPos() + particle.getYVelocity());
+        }
     }
 
 

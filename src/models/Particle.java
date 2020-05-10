@@ -1,11 +1,14 @@
 package models;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 public class Particle extends Circle {
     private double weight;
     private double xVelocity;
     private double yVelocity;
+    private final double MIN_WEIGHT = 2;
 
 
     /* CONSTRUCTORS */
@@ -34,7 +37,7 @@ public class Particle extends Circle {
      * instantiate a new particle with default weight (1 amu) and default position (0,0)
      */
     public Particle(){
-        super(10, 10, 5);
+        super(10,10,3);
         this.weight = this.getRadius();
         this.setVelocity(1);
     }
@@ -62,6 +65,9 @@ public class Particle extends Circle {
     public double getYVelocity(){
         return this.yVelocity;
     }
+    public Paint getColor(){
+        return this.getFill();
+    }
 
 
     /* SET METHODS */
@@ -83,7 +89,9 @@ public class Particle extends Circle {
     public void setYPos(double yPos){
         this.setCenterY(yPos + this.getRadius());
     }
-
+    public void setColor(Color color){
+        this.setFill(color);
+    }
     /**
      * JSON of info about the particle
      * @return

@@ -23,7 +23,6 @@ public class IdealGasAnimationService extends ParticleAnimationService {
         super();
         System.out.println("IdealGasAnimationService Instance Created");
     }
-
     /**
      * Get singleton instance of IdealGasAnimatonService
      * @return instance of IdealGasAnimationService
@@ -42,51 +41,17 @@ public class IdealGasAnimationService extends ParticleAnimationService {
      * @param animationPane, the pane where the animation will be drawn
      */
     public void animate(ParticleSystem particleSystem, Pane animationPane){
-        Random random = new Random();
-        
-        ListIterator<Particle> particleIterator = particleSystem.getParticles().listIterator();
-        //init particle pos, speed, color etc.
-        while(particleIterator.hasNext()) {
-            Particle particle = particleIterator.next();
-            particle.setFill(Color.RED);
-            particle.setXPos(random.nextInt((int)animationPane.getWidth()));
-            particle.setYPos((int) random.nextInt((int) animationPane.getHeight()));
-            HashMap<String, Integer> speedProperties = new HashMap<String, Integer>();
-            particle.setVelocity(random.nextInt(5) + 1);
-
-        }
-
+        //init starting position of particles
+        particleSystem.init(animationPane.getWidth(), animationPane.getHeight());
         animationPane.getChildren().addAll(particleSystem.getParticles());
 
-        //set game loop to run continously (unless we call timeline.stop())
+        //set animation loop to run continuously (unless we call timeline.stop())
         timeline.setCycleCount(Timeline.INDEFINITE);
 
-        /*
-         * Particle Updates Calculated Every 60 seconds In This KeyFrame
-         */
-        KeyFrame kf = new KeyFrame(
-                //60 Frames Per Second
-                Duration.seconds(0.017),
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        //updating particle position
-                        ListIterator<Particle> particleIterator = particleSystem.getParticles().listIterator();
-                        while(particleIterator.hasNext()) {
-                            Particle particle = particleIterator.next();
-
-                            //bounds detection
-                            if((particle.getXPos() > animationPane.getWidth() - particle.getWidth()) || (particle.getXPos() <= 0)){
-                                particle.setXVelocity(particle.getXVelocity() * -1);
-                            }
-                            if((particle.getYPos() > animationPane.getHeight() - particle.getHeight()) || (particle.getYPos() <= 0)){
-                                particle.setYVelocity(particle.getYVelocity() * -1);
-                            }
-
-                            particle.setXPos(particle.getXPos() + particle.getXVelocity());
-                            particle.setYPos(particle.getYPos() + particle.getYVelocity());
-                        }
-                    }
+        //Particle Updates Calculated Every 60 seconds In This KeyFrame
+        KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> {
+                    //updating particle position
+                    particleSystem.updateParticlePositions(animationPane.getWidth(), animationPane.getHeight());
                 }
         );
 

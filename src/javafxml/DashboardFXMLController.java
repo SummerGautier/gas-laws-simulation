@@ -46,7 +46,7 @@ public class DashboardFXMLController implements Initializable {
     @FXML
     public void startSimulation(){
         //instantiate particle system with the proper number of particles
-        ParticleSystem particleSystem1 = new ParticleSystem(50);
+        ParticleSystem particleSystem1 = new ParticleSystem(150);
         //use animation service to start particle animation
         particleAnimationService.animate(particleSystem1, this.animationPane);
         //update status of play button
