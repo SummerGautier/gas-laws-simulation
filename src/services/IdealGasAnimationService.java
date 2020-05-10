@@ -47,7 +47,7 @@ public class IdealGasAnimationService extends ParticleAnimationService {
         Random random = new Random();
         int circleRadius = 5;
         //init particles
-        while(circlesList.size() <= 10) {
+        while(circlesList.size() <= 50) {
             int startX = random.nextInt((int) animationPane.getWidth()) + circleRadius;
             int startY = random.nextInt((int) animationPane.getHeight()) +  circleRadius;
             Circle circle = new Circle(startX, startY, circleRadius, Color.DARKRED);
