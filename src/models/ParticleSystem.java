@@ -166,16 +166,30 @@ public abstract class ParticleSystem {
      */
     public void updateParticlePositions(double xBounds, double yBounds){
         for(Particle particle : this.particles) {
-            //bounds detection
-            if((particle.getXPos() > xBounds - particle.getWidth()) || (particle.getXPos() <= 0)){
-                particle.setXVelocity(particle.getXVelocity() * -1);
-            }
-            if((particle.getYPos() > yBounds - particle.getHeight()) || (particle.getYPos() <= 0)){
-                particle.setYVelocity(particle.getYVelocity() * -1);
-            }
+            //bounds collision detection
+            detectBoundsCollision(particle, xBounds, yBounds);
 
+            //particle collision detection
             particle.setXPos(particle.getXPos() + particle.getXVelocity());
             particle.setYPos(particle.getYPos() + particle.getYVelocity());
+
+        }
+    }
+
+    /**
+     * Detect if collision of particle at bounds
+     * @param particle, the particle which will have it's position compared
+     * @param xBounds, max x value of bounds
+     * @param yBounds, max y value of bounds
+     */
+    private void detectBoundsCollision(Particle particle, double xBounds, double yBounds){
+        //check X Bounds for collision
+        if((particle.getXPos() > xBounds - particle.getWidth()) || (particle.getXPos() <= 0)){
+            particle.setXVelocity(particle.getXVelocity() * -1);
+        }
+        //check Y Bounds for collision
+        if((particle.getYPos() > yBounds - particle.getHeight()) || (particle.getYPos() <= 0)){
+            particle.setYVelocity(particle.getYVelocity() * -1);
         }
     }
 
