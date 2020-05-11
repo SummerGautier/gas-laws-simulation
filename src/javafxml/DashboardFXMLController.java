@@ -7,8 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
+import models.IdealParticleSystem;
 import models.ParticleSystem;
 import animation.ParticleAnimationService;
+import models.VanderWaalsParticleSystem;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,21 +32,20 @@ public class DashboardFXMLController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         /* Initialize Controls Here */
-
         //playback button
         this.playBackBtn.setOnAction(new playBackHandler());
         this.playBackBtn.setUserData(PlayBackStatus.STOPPED);
 
         //enable vander waals checkbox
-        this.enableVanderWaalCheckBox.setOnAction(new enableVanDerWaalHandler());
         this.enableVanderWaalCheckBox.setDisable(false);
 
     }
 
     @FXML
     public void startSimulation(){
-        //instantiate particle system with the proper number of particles
-        ParticleSystem particleSystem1 = new ParticleSystem(150);
+        //instantiate correct particle system with the proper number of particles
+        ParticleSystem particleSystem1 = (enableVanderWaalCheckBox.isSelected())? new VanderWaalsParticleSystem() : new IdealParticleSystem();
+        particleSystem1.add(150);
         //use animation service to start particle animation
         particleAnimationService.animate(particleSystem1, this.animationPane);
         //update status of play button
@@ -75,12 +76,6 @@ public class DashboardFXMLController implements Initializable {
             } else if (PlayBackStatus.STARTED.equals(userData)) {
                 stopSimulation();
             }
-        }
-    }
-    private class enableVanDerWaalHandler implements EventHandler<ActionEvent>{
-        @Override
-        public void handle(ActionEvent e){
-            //particleAnimationService = (enableVanderWaalCheckBox.isSelected())? VanDerWaalGasAnimationService.getInstance() : IdealGasAnimationService.getInstance();
         }
     }
 }

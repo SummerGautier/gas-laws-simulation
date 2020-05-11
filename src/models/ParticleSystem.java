@@ -10,49 +10,34 @@ import java.util.stream.Collectors;
 
 import static java.lang.Integer.min;
 
-public class ParticleSystem {
-    private ArrayList<Particle> particles;
-    private double volume;
-    private double temperature;
-    private double pressure;
-    private double avgKineticSpeed;
+public abstract class ParticleSystem {
+    protected double volume;
+    protected double temperature;
+    protected double pressure;
+    protected double moles;
 
-    private Color color = Color.RED;
-    private ListIterator<Particle> particleIterator;
+    protected Color color;
 
+    protected ListIterator<Particle> particleIterator;
+    protected ArrayList<Particle> particles;
+
+    private final Random random;
     private final int MAX_PARTICLES = 500;
-    private final Random random = new Random();
 
 
     /* CONSTRUCTORS */
-    /**
-     * instantiates a Particle system with
-     * The minimum of: the max allowed particles OR the number of particles requested
-     * All Particles start at the specified x and y position
-     * @param numberOfParticles, the number of system particles requested
-     */
-    public ParticleSystem(int numberOfParticles){
-        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
-        //add the minimum of the maximum allows particles OR the number of particles requested.
-        for (int i = 0; i < min(numberOfParticles, MAX_PARTICLES); i++) {
-            this.particles.add(new Particle());
-        }
-    }
-    /**
-     * insantiates a particle system with the specified collection of particles
-     * @param newParticles, a collection of particles to be injected into the system
-     */
-    public ParticleSystem(ArrayList<Particle> newParticles){
-        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
-        this.addAll(newParticles);
-    }
+
     /**
      * instantiates a Particle System with the max number of particles
      */
     public ParticleSystem(){
-        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
+        this.particles = new ArrayList<Particle>();
+        this.random = new Random();
+        this.color = Color.RED;
+        this.volume = 1;
+        this.temperature = 1;
+        this.pressure = 1;
     }
-
 
     /* INIT METHODS */
     /**
@@ -86,7 +71,7 @@ public class ParticleSystem {
         }
     }
     /**
-     * initliaze particles at specified position(s)
+     * initliaze each particle at specified corresponding position in a collection of position(s)
      * @param positions, a collection of particle positions
      */
     public void init(HashMap<Integer, HashMap<Double,Double>> positions){
@@ -116,13 +101,6 @@ public class ParticleSystem {
         return particles;
     }
     /**
-     * average kinetic speed of particles in the system
-     * @return
-     */
-    public double getAvgKineticSpeed() {
-        return avgKineticSpeed;
-    }
-    /**
      * system pressure (in atmospheres)
      * @return
      */
@@ -150,6 +128,9 @@ public class ParticleSystem {
     public int getMAX_PARTICLES() {
         return MAX_PARTICLES;
     }
+    public double getMoles() {
+        return moles;
+    }
 
 
     /* UPDATE METHODS */
@@ -175,6 +156,9 @@ public class ParticleSystem {
         this.volume = volume;
     }
 
+    public void updateMoles(double moles) {
+        this.moles = moles;
+    }
     /**
      * update position of particles
      * @param xBounds, max x boundary of animation pane
@@ -195,7 +179,6 @@ public class ParticleSystem {
         }
     }
 
-
     /* BUSINESS METHODS */
     /**
      * adds a new particle to the particle system
@@ -207,6 +190,18 @@ public class ParticleSystem {
         }
     }
     /**
+     * Adds the minimum of: the max allowed particles OR the number of particles requested
+     * All Particles start at the specified x and y position
+     * @param numberOfParticles, the number of system particles requested
+     */
+    public void add(int numberOfParticles){
+        this.particles = new ArrayList<Particle>(MAX_PARTICLES);
+        //add the minimum of the maximum allows particles OR the number of particles requested.
+        for (int i = 0; i < min(numberOfParticles, MAX_PARTICLES); i++) {
+            this.particles.add(new Particle());
+        }
+    }
+    /**
      * adds a collection of particles to the particle system
      * @param newParticles
      */
@@ -215,6 +210,7 @@ public class ParticleSystem {
             particles.addAll(newParticles);
         }
     }
+
     /**
      * removes the specified number of particles
      * @param numberOfParticlesToRemove, total number of particles to be removed
@@ -228,6 +224,8 @@ public class ParticleSystem {
         }
     }
 
+    /* ABSTRACT METHODS */
+    public abstract void calculateParticleVelocities();
 
     /* STRING METHODS */
     /**
@@ -252,7 +250,6 @@ public class ParticleSystem {
                 ",\n\t'volume':" + volume +
                 ",\n\t'temperature':" + temperature +
                 ",\n\t'pressure':" + pressure +
-                ",\n\t'avgKineticSpeed':" + avgKineticSpeed +
                 ",\n\t'MAX_PARTICLES':" + MAX_PARTICLES+
                 "\n}";
     }

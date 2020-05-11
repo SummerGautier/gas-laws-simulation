@@ -9,12 +9,15 @@ public class ParticleAnimationService{
     private static ParticleAnimationService particleAnimationService;
     private final Timeline timeline = new Timeline();
 
+    /**
+     * Private constructor of particle animation service
+     */
     private ParticleAnimationService(){
-        super();
         System.out.println("ParticleAnimationService Instance Created");
     }
+
     /**
-     * Get singleton instance of IdealGasAnimatonService
+     * Get singleton instance of ParticleAnimationService
      * @return instance of ParticleAnimationService
      */
     public static ParticleAnimationService getInstance(){
