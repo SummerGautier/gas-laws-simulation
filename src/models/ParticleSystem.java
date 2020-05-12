@@ -172,7 +172,7 @@ public abstract class ParticleSystem {
         for(Particle particle : this.particles) {
 
             //detect particle collision
-            //detectParticleCollision(particle, this.particles);
+            detectParticleCollision(particle, this.particles);
 
             /*
                 TODO: Combine intra-particle collisions with bounds
