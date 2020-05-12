@@ -21,7 +21,7 @@ public class Particle extends Circle {
     public Particle(int startXPos, int startYPos, double weight){
         super(startXPos, startYPos, weight);
         this.weight = this.getRadius();
-        this.setVelocity(1);
+        this.setXYVelocity(1);
     }
 
     /**
@@ -31,15 +31,15 @@ public class Particle extends Circle {
     public Particle(double weight){
         super( 0 + 2 * weight, 0 + 2 * weight, weight);
         this.weight = this.getRadius();
-        this.setVelocity(1);
+        this.setXYVelocity(1);
     }
     /**
      * instantiate a new particle with default weight (1 amu) and default position (0,0)
      */
     public Particle(){
-        super(10,10,3);
+        super(10,10,5);
         this.weight = this.getRadius();
-        this.setVelocity(1);
+        this.setXYVelocity(1);
     }
 
 
@@ -65,6 +65,7 @@ public class Particle extends Circle {
     public double getYVelocity(){
         return this.yVelocity;
     }
+    public double getVelocity(){ return Math.sqrt(Math.pow(this.getXVelocity(), 2) + Math.pow(this.getYVelocity(),2));}
     public Paint getColor(){
         return this.getFill();
     }
@@ -73,8 +74,9 @@ public class Particle extends Circle {
     /* SET METHODS */
     public void setWeight(double weight) {
         this.weight = weight;
+        this.setRadius(weight);
     }
-    public void setVelocity(double velocity) {
+    public void setXYVelocity(double velocity) {
         this.xVelocity = this.yVelocity = velocity;
     }
     public void setXVelocity(double velocity){

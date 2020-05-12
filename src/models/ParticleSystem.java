@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.min;
+import static java.lang.Math.*;
 
 public abstract class ParticleSystem {
     protected double volume;
@@ -47,10 +48,11 @@ public abstract class ParticleSystem {
         //init particle pos, speed, color etc.
         for(Particle particle : this.particles) {
             particle.setColor(this.color);
-            particle.setXPos(random.nextInt((int)xBounds));
-            particle.setYPos((int) random.nextInt((int)yBounds));
-            particle.setVelocity(1);
-
+            particle.setXPos(random.nextInt((int)(xBounds - particle.getWidth())));
+            particle.setYPos((int) random.nextInt((int)(yBounds - particle.getHeight())));
+            particle.setXVelocity((int)random.nextInt(15)-5);
+            particle.setYVelocity((int)random.nextInt(15)-5);
+            particle.setWeight(10);
         }
     }
     /**
@@ -66,7 +68,8 @@ public abstract class ParticleSystem {
             particle.setColor(this.color);
             particle.setXPos(x);
             particle.setYPos(y);
-            particle.setVelocity(1);
+            particle.setXVelocity(1);
+            particle.setYVelocity(1);
 
         }
     }
@@ -87,7 +90,8 @@ public abstract class ParticleSystem {
             particle.setColor(this.color);
             particle.setXPos(x);
             particle.setYPos(y);
-            particle.setVelocity(1);
+            particle.setXVelocity(1);
+            particle.setYVelocity(1);
 
         }
     }
@@ -166,12 +170,19 @@ public abstract class ParticleSystem {
      */
     public void updateParticlePositions(double xBounds, double yBounds){
         for(Particle particle : this.particles) {
-            //bounds collision detection
-            detectBoundsCollision(particle, xBounds, yBounds);
 
+            //detect particle collision
+            //detectParticleCollision(particle, this.particles);
+
+            /*
+                TODO: Combine intra-particle collisions with bounds
+             */
             //particle collision detection
             particle.setXPos(particle.getXPos() + particle.getXVelocity());
             particle.setYPos(particle.getYPos() + particle.getYVelocity());
+
+            //detect bounds collisions
+            detectBoundsCollision(particle, xBounds, yBounds);
 
         }
     }
@@ -183,6 +194,8 @@ public abstract class ParticleSystem {
      * @param yBounds, max y value of bounds
      */
     private void detectBoundsCollision(Particle particle, double xBounds, double yBounds){
+
+        //if already out of bounds, set to negative and
         //check X Bounds for collision
         if((particle.getXPos() > xBounds - particle.getWidth()) || (particle.getXPos() <= 0)){
             particle.setXVelocity(particle.getXVelocity() * -1);
@@ -192,6 +205,55 @@ public abstract class ParticleSystem {
             particle.setYVelocity(particle.getYVelocity() * -1);
         }
     }
+    private void detectParticleCollision(Particle particle, ArrayList<Particle> particles){
+        particleIterator = particles.listIterator();
+        while(particleIterator.hasNext()){
+            Particle otherParticle = particleIterator.next();
+            if(Math.pow((otherParticle.getCenterX()-particle.getCenterX()),2) + Math.pow((particle.getCenterY()-otherParticle.getCenterY()),2) <= Math.pow(particle.getRadius()+otherParticle.getRadius(),2)){
+                adjustVelocityPostCollision(particle, otherParticle);
+            }
+        }
+    }
+
+    private void adjustVelocityPostCollision(Particle particle1, Particle particle2){
+        /*
+            EQUATION REFERENCE: https://williamecraver.wixsite.com/elastic-equations
+            ALSO SEE: https://en.wikipedia.org/wiki/Elastic_collision
+         */
+        /*
+            TODO: calculate PHI and incorporate multi-point collision
+         */
+        //mass
+        double m1 = particle1.getWeight();
+        double m2 = particle2.getWeight();
+        //velocity
+        double v1 = particle1.getVelocity();
+        double v2 = particle2.getVelocity();
+        //angles
+        double theta1 = Math.acos(particle1.getXVelocity()/particle1.getVelocity());
+        double theta2 = Math.acos(particle2.getXVelocity()/particle2.getVelocity());
+        double phi = -0.5;
+        //rotated velocities
+        double v1Xr = v1*cos(theta1-phi);
+        double v1Yr = v1*sin(theta1-phi);
+        double v2Xr = v2*cos(theta2-phi);
+        double v2Yr = v2*sin(theta2-phi);
+        //solved ROTATED x components of velocity in collision equation
+        double v1FXr = ((v1Xr)*(m1-m2)+(2*m2*v2Xr))/(m1+m2);
+        double v2FXr = ((v2Xr)*(m2-m1)+(2*m1*v1Xr))/(m1+m2);
+        //final UN-ROTATED x and y components of velocity in collision equation
+        double v1FX = (v1FXr*cos(phi)) + (v1Yr*cos(phi+(PI/2)));
+        double v1FY = (v1FXr*sin(phi)) + (v1Yr*sin(phi+(PI/2)));
+        double v2FX = (v2FXr*cos(phi)) + (v2Yr*cos(phi+(PI/2)));
+        double v2FY = (v2FXr*sin(phi)) + (v2Yr*sin(phi+(PI/2)));
+
+        //set new x and y velocity of particles
+        particle1.setXVelocity(v1FX);
+        particle1.setYVelocity(v1FY);
+        particle2.setXVelocity(v2FX);
+        particle2.setYVelocity(v2FY);
+    }
+
 
     /* BUSINESS METHODS */
     /**

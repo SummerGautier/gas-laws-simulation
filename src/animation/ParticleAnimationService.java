@@ -43,9 +43,9 @@ public class ParticleAnimationService{
 
         //Particle Updates Calculated Every 60 seconds In This KeyFrame
         KeyFrame kf = new KeyFrame(Duration.seconds(0.017), event -> {
-            //updating particle position
-            particleSystem.updateParticlePositions(animationPane.getWidth(), animationPane.getHeight());
-        }
+                //updating particle position
+                particleSystem.updateParticlePositions(animationPane.getWidth(), animationPane.getHeight());
+            }
         );
 
         //add key frame to simulation loop
