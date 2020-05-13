@@ -4,10 +4,7 @@ import com.sun.javafx.geom.Vec2d;
 import javafx.scene.paint.Color;
 import physics.Vector2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ListIterator;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.min;
@@ -138,10 +135,9 @@ public abstract class ParticleSystem {
             //detect particle collision
             detectParticleCollision(particle, this.particles);
 
-            //particle collision detection
+            //update particle position
             particle.setXPos(particle.getXPos() + particle.getXVelocity());
             particle.setYPos(particle.getYPos() + particle.getYVelocity());
-
 
             //detect bounds collisions
             detectBoundsCollision(particle, xBounds, yBounds);
@@ -176,16 +172,34 @@ public abstract class ParticleSystem {
         while(particleIterator.hasNext()){
             Particle otherParticle = particleIterator.next();
             if(Math.pow((otherParticle.getCenterX()-particle.getCenterX()),2) + Math.pow((otherParticle.getCenterY()-particle.getCenterY()),2) <= Math.pow(particle.getRadius()+otherParticle.getRadius(),2)){
-                particle.setXVelocity(particle.getXVelocity() * -1);
-                particle.setYVelocity(particle.getYVelocity() * -1);
-
-                otherParticle.setXVelocity(otherParticle.getXVelocity() * -1);
-                otherParticle.setYVelocity(otherParticle.getYVelocity() * -1);
-
+                resolveCollision(particle, otherParticle);
             }
         }
     }
+    private void resolveCollision(Particle particle1, Particle particle2){
+        Vector2 tangentVector = new Vector2();
+        //vector perpendicular to (x,y) is (-y, x)
+        tangentVector.setY(-(particle2.getXPos() - particle1.getXPos()));
+        tangentVector.setX(particle2.getYPos() - particle1.getYPos());
+        //normalize tangent vector
+        tangentVector.normalize();
+        //calculate relative velocity
+        Vector2 relativeVelocity = new Vector2(particle1.getXVelocity() - particle2.getXVelocity(), particle1.getYVelocity() - particle2.getYVelocity());
+        //get length of the velocity component parallel to the tangent
+        double length = Vector2.dotProduct(relativeVelocity, tangentVector);
+        //multiply noramlized tangent vector by length (scalar) to get the vector componenet parallele ot the tangent
+        Vector2 velocityComponentOnTangent = Vector2.multiply(tangentVector, length);
+        //substracting parallel component veloicty from the relative velocity gives us the perpendicular component
+        Vector2 velocityComponentPerpendicularToTangent = Vector2.subtract(relativeVelocity, velocityComponentOnTangent);
+        //adjust particle velocities
+        //particle 1
+        particle1.setXVelocity(particle1.getXVelocity() - velocityComponentPerpendicularToTangent.getX());
+        particle1.setYVelocity(particle1.getYVelocity() - velocityComponentPerpendicularToTangent.getY());
+        //partilce 2
+        particle2.setXVelocity(particle2.getXVelocity() + velocityComponentPerpendicularToTangent.getX());
+        particle2.setYVelocity(particle2.getYVelocity() + velocityComponentPerpendicularToTangent.getY());
 
+    }
 
 
     /* COLLECTION METHODS */

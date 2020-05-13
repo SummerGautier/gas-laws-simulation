@@ -38,6 +38,15 @@ public class Vector2 {
         double v2 = b.getY() - a.getY();
         return Math.sqrt(v1*v1 + v2*v2);
     }
+    public static double dotProduct(Vector2 a, Vector2 b){
+        return (a.getX() * b.getX()) + (a.getY() * b.getY());
+    }
+    public static Vector2 multiply(Vector2 vector, Double scalar){
+        return new Vector2(vector.getX() * scalar, vector.getY() * scalar);
+    }
+    public static Vector2 subtract(Vector2 a, Vector2 b){
+        return new Vector2(a.getX() - b.getX(), a.getY() - b.getY());
+    }
 
     /* GET METHODS */
     public double getX() {
