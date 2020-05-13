@@ -2,6 +2,7 @@ package models;
 
 import com.sun.javafx.geom.Vec2d;
 import javafx.scene.paint.Color;
+import physics.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ public abstract class ParticleSystem {
     private final int MAX_PARTICLES = 500;
 
 
-    /* CONSTRUCTORS */
 
     /**
      * instantiates a Particle System with the max number of particles
@@ -41,59 +41,19 @@ public abstract class ParticleSystem {
         this.pressure = 1;
     }
 
-    /* INIT METHODS */
     /**
      * initialize particles in random positions
      */
     public void init(double xBounds, double yBounds){
         //init particle pos, speed, color etc.
         for(Particle particle : this.particles) {
-            particle.setColor(this.color);
-            particle.setXPos(random.nextInt((int)(xBounds - particle.getWidth())));
-            particle.setYPos((int) random.nextInt((int)(yBounds - particle.getHeight())));
-            particle.setXVelocity((int)random.nextInt(15)-5);
-            particle.setYVelocity((int)random.nextInt(15)-5);
             particle.setWeight(10);
-        }
-    }
-    /**
-     * intialize particles at specified starting position
-     * @param x, x position
-     * @param y, y position
-     */
-    public void init(double xBounds, double yBounds, double x, double y){
-        x = (x > xBounds || x < 0)? xBounds/2 : x;
-        y = (y > yBounds || y < 0)? yBounds/2 : y;
-        //init particle pos, speed, color etc.
-        for(Particle particle : this.particles) {
             particle.setColor(this.color);
-            particle.setXPos(x);
-            particle.setYPos(y);
-            particle.setXVelocity(1);
-            particle.setYVelocity(1);
 
-        }
-    }
-    /**
-     * initliaze each particle at specified corresponding position in a collection of position(s)
-     * @param positions, a collection of particle positions
-     */
-    public void init(HashMap<Integer, HashMap<Double,Double>> positions){
-        particleIterator = this.getParticles().listIterator();
-        while(particleIterator.hasNext()) {
-            //get particle position from collection
-            HashMap<Double,Double> position = positions.get(particleIterator.nextIndex());
-            double x = position.get(0);
-            double y = position.get(1);
+            particle.setVelocity(new Vector2(2,5));
 
-            //set particle data
-            Particle particle = particleIterator.next();
-            particle.setColor(this.color);
-            particle.setXPos(x);
-            particle.setYPos(y);
-            particle.setXVelocity(1);
-            particle.setYVelocity(1);
-
+            particle.setXPos(random.nextInt((int) (xBounds - 2 * particle.getRadius())) + particle.getRadius());
+            particle.setYPos(random.nextInt((int) (yBounds - 2 * particle.getRadius())) + particle.getRadius());
         }
     }
 
@@ -160,10 +120,13 @@ public abstract class ParticleSystem {
     public void updateVolume(double volume) {
         this.volume = volume;
     }
-
     public void updateMoles(double moles) {
         this.moles = moles;
     }
+
+
+
+    /* PARTICLE MOVEMENT METHODS */
     /**
      * update position of particles
      * @param xBounds, max x boundary of animation pane
@@ -175,13 +138,13 @@ public abstract class ParticleSystem {
             //detect particle collision
             detectParticleCollision(particle, this.particles);
 
-
-            //detect bounds collisions
-            detectBoundsCollision(particle, xBounds, yBounds);
             //particle collision detection
             particle.setXPos(particle.getXPos() + particle.getXVelocity());
             particle.setYPos(particle.getYPos() + particle.getYVelocity());
 
+
+            //detect bounds collisions
+            detectBoundsCollision(particle, xBounds, yBounds);
 
         }
     }
@@ -193,14 +156,12 @@ public abstract class ParticleSystem {
      * @param yBounds, max y value of bounds
      */
     private void detectBoundsCollision(Particle particle, double xBounds, double yBounds){
-
-        //if already out of bounds, set to negative and
         //check X Bounds for collision
-        if((particle.getXPos() > xBounds - particle.getWidth()) || (particle.getXPos() <= 0)){
+        if(particle.getXPos() + particle.getXVelocity() > xBounds - particle.getRadius() || particle.getXPos() + particle.getXVelocity() < particle.getRadius()){
             particle.setXVelocity(particle.getXVelocity() * -1);
         }
         //check Y Bounds for collision
-        if((particle.getYPos() > yBounds - particle.getHeight()) || (particle.getYPos() <= 0)){
+        if(particle.getYPos() + particle.getYVelocity() > yBounds - particle.getRadius() || particle.getYPos() + particle.getYVelocity() < particle.getRadius()){
             particle.setYVelocity(particle.getYVelocity() * -1);
         }
     }
@@ -227,7 +188,7 @@ public abstract class ParticleSystem {
 
 
 
-    /* BUSINESS METHODS */
+    /* COLLECTION METHODS */
     /**
      * adds a new particle to the particle system
      * @param particle, the particle object to add to this system
@@ -272,8 +233,6 @@ public abstract class ParticleSystem {
         }
     }
 
-    /* ABSTRACT METHODS */
-    public abstract void calculateParticleVelocities();
 
     /* STRING METHODS */
     /**
@@ -301,4 +260,9 @@ public abstract class ParticleSystem {
                 ",\n\t'MAX_PARTICLES':" + MAX_PARTICLES+
                 "\n}";
     }
+
+
+
+    /* ABSTRACT METHODS */
+    public abstract void calculateParticleVelocities();
 }

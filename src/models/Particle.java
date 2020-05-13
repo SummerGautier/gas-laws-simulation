@@ -3,13 +3,10 @@ package models;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import physics.Vector2;
 
 public class Particle extends Circle {
-    private double weight;
-    private double xVelocity;
-    private double yVelocity;
-    private final double MIN_WEIGHT = 2;
-
+    private Vector2 velocity;
 
     /* CONSTRUCTORS */
     /**
@@ -20,82 +17,80 @@ public class Particle extends Circle {
      */
     public Particle(int startXPos, int startYPos, double weight){
         super(startXPos, startYPos, weight);
-        this.weight = this.getRadius();
-        this.setXYVelocity(1);
     }
-
     /**
      * instantiate a new particle with specified weight (in amu), default position (0,0)
      * @param weight, size of particle in amu
      */
     public Particle(double weight){
         super( 0 + 2 * weight, 0 + 2 * weight, weight);
-        this.weight = this.getRadius();
-        this.setXYVelocity(1);
     }
     /**
      * instantiate a new particle with default weight (1 amu) and default position (0,0)
      */
     public Particle(){
-        super(10,10,5);
-        this.weight = this.getRadius();
-        this.setXYVelocity(1);
+        super(50,50,5);
     }
 
 
     /* GET METHODS */
-    public double getWeight() {
-        return weight;
-    }
+    //position
     public double getXPos(){
-        return (this.getCenterX() - this.getRadius());
+        return this.getCenterX();
     }
     public double getYPos(){
-        return (this.getCenterY() - this.getRadius());
+        return this.getCenterY();
     }
-    public double getWidth(){
-        return (2 * this.getRadius());
-    }
-    public double getHeight(){
-        return (2 * this.getRadius());
-    }
+    public Vector2 getPosVector(){return new Vector2(this.getXPos(), this.getYPos());}
+    //velocity
     public double getXVelocity(){
-        return this.xVelocity;
+        return this.velocity.getX();
     }
     public double getYVelocity(){
-        return this.yVelocity;
+        return this.velocity.getY();
     }
-    public double getVelocity(){
-        return Math.sqrt(Math.pow(this.getXVelocity(), 2) + Math.pow(this.getYVelocity(),2));
+    public Vector2 getVelocity(){
+        return this.velocity;
     }
+    //weight
+    public double getWeight() {
+        return this.getRadius();
+    }
+    //color
     public Paint getColor(){
         return this.getFill();
     }
 
 
     /* SET METHODS */
-    public void setWeight(double weight) {
-        this.weight = weight;
-        this.setRadius(weight);
-    }
-    public void setXYVelocity(double velocity) {
-        this.xVelocity = this.yVelocity = velocity;
-    }
-    public void setXVelocity(double velocity){
-        this.xVelocity = velocity;
-    }
-    public void setYVelocity(double velocity){
-        this.yVelocity = velocity;
-    }
+    //position
     public void setXPos(double xPos){
-        this.setCenterX(xPos + this.getRadius());
+        this.setCenterX(xPos);
     }
     public void setYPos(double yPos){
-        this.setCenterY(yPos + this.getRadius());
+        this.setCenterY(yPos);
     }
+    public void setPosition(Vector2 position){ this.setCenterX(position.getX()); this.setCenterY(position.getY());}
+    //velocity
+    public void setXVelocity(double velocity){
+        this.velocity.setX(velocity);
+    }
+    public void setYVelocity(double velocity){
+        this.velocity.setY(velocity);
+    }
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+    //weight
+    public void setWeight(double weight) {
+        this.setRadius(weight);
+    }
+    //color
     public void setColor(Color color){
         this.setFill(color);
     }
+
+
     /**
      * JSON of info about the particle
      * @return
@@ -103,7 +98,7 @@ public class Particle extends Circle {
     @Override
     public String toString() {
         return "'Particle'{" +
-                "'weight':" + weight +
+                "'weight':" + this.getRadius() +
                 ", 'xPos':" + getYPos() +
                 ", 'yPos':" + getXPos() +
                 '}';
