@@ -44,7 +44,7 @@ public abstract class ParticleSystem {
     public void init(double xBounds, double yBounds){
         //init particle pos, speed, color etc.
         for(Particle particle : this.particles) {
-            particle.setWeight(10);
+            particle.setWeight(7);
             particle.setColor(this.color);
 
             particle.setVelocity(new Vector2(2,5));
@@ -192,6 +192,7 @@ public abstract class ParticleSystem {
         //substracting parallel component veloicty from the relative velocity gives us the perpendicular component
         Vector2 velocityComponentPerpendicularToTangent = Vector2.subtract(relativeVelocity, velocityComponentOnTangent);
         //adjust particle velocities
+
         //particle 1
         particle1.setXVelocity(particle1.getXVelocity() - velocityComponentPerpendicularToTangent.getX());
         particle1.setYVelocity(particle1.getYVelocity() - velocityComponentPerpendicularToTangent.getY());
