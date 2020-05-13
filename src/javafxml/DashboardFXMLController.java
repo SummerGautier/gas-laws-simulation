@@ -4,9 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import models.IdealParticleSystem;
 import models.ParticleSystem;
 import animation.ParticleAnimationService;
@@ -17,6 +19,8 @@ import java.util.ResourceBundle;
 
 public class DashboardFXMLController implements Initializable {
     private ParticleAnimationService particleAnimationService;
+    private IdealParticleSystem idealParticleSystem;
+    private VanderWaalsParticleSystem vanderWaalsParticleSystem;
     private enum PlayBackStatus { STARTED, STOPPED}
 
     @FXML private Button playBackBtn;
@@ -26,6 +30,8 @@ public class DashboardFXMLController implements Initializable {
     public DashboardFXMLController(){
         //initialize singletons here
         this.particleAnimationService = particleAnimationService.getInstance();
+        this.idealParticleSystem = new IdealParticleSystem();
+        this.vanderWaalsParticleSystem = new VanderWaalsParticleSystem();
     }
 
     @Override
@@ -44,12 +50,13 @@ public class DashboardFXMLController implements Initializable {
     @FXML
     public void startSimulation(){
         //instantiate correct particle system with the proper number of particles
-        ParticleSystem particleSystem1 = (enableVanderWaalCheckBox.isSelected())? new VanderWaalsParticleSystem() : new IdealParticleSystem();
-        particleSystem1.add(150);
+        ParticleSystem particleSystem = (enableVanderWaalCheckBox.isSelected())? vanderWaalsParticleSystem : idealParticleSystem;
+        particleSystem.setSize (150);
         //use animation service to start particle animation
-        particleAnimationService.animate(particleSystem1, this.animationPane);
+        particleAnimationService.animate(particleSystem, this.animationPane);
         //update status of play button
         this.playBackBtn.setUserData(PlayBackStatus.STARTED);
+        this.playBackBtn.setStyle("-fx-background-color: indianred");
         this.playBackBtn.setText("Stop Simulation");
         //disable switching of animation service
         this.enableVanderWaalCheckBox.setDisable(true);
@@ -61,6 +68,7 @@ public class DashboardFXMLController implements Initializable {
         particleAnimationService.stopAnimation(this.animationPane);
         //update status of play button
         this.playBackBtn.setUserData(PlayBackStatus.STOPPED);
+        this.playBackBtn.setStyle("-fx-background-color: lightgreen");
         this.playBackBtn.setText("Start Simulation");
         //enable switching of animation service
         this.enableVanderWaalCheckBox.setDisable(false);

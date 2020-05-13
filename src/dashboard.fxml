@@ -1,36 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="800" prefWidth="1200" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxml.DashboardFXMLController">
-    <left>
-        <Label text="Simulation Info:" />
-    </left>
+<BorderPane prefHeight="800" prefWidth="1200" style="-fx-padding: 10;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxml.DashboardFXMLController">
     <bottom>
-        <Label id="copyrightLabel" fx:id="copyrightLabel" text="Gas Laws Simulation Software Created By @Summer Gautier 2020" />
+        <Label id="copyrightLabel" fx:id="copyrightLabel" alignment="CENTER" style="-fx-min-height: 25; -fx-padding: 10;" text="Gas Laws Simulation Software Created By @Summer Gautier 2020" textAlignment="CENTER">
+         <font>
+            <Font name="Comic Sans MS" size="12.0" />
+         </font></Label>
     </bottom>
    <center>
-      <Pane id="animationPane" fx:id="animationPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: BLACK; -fx-max-width: 700; -fx-max-height: 600;" BorderPane.alignment="CENTER" />
+      <Pane id="animationPane" fx:id="animationPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" style="-fx-padding: 10;" BorderPane.alignment="CENTER" />
    </center>
    <right>
-      <VBox id="rightVBOXContainer" fx:id="rightVBOXContainer" prefHeight="300.0" prefWidth="200.0">
+      <VBox id="rightVBOXContainer" fx:id="rightVBOXContainer" prefHeight="300.0" prefWidth="200.0" style="-fx-padding: 10;">
          <children>
-            <HBox id="enableVanderWaalContainer" fx:id="enableVanderWaalContainer" prefHeight="100.0" prefWidth="200.0">
+            <HBox id="enableVanderWaalContainer" fx:id="enableVanderWaalContainer" prefHeight="100.0" prefWidth="180.0">
                <children>
-                  <CheckBox id="enableVanderWaalCheckBox" fx:id="enableVanderWaalCheckBox" mnemonicParsing="false" text="Enable Vander Waal's Equation" />
+                  <CheckBox id="enableVanderWaalCheckBox" fx:id="enableVanderWaalCheckBox" mnemonicParsing="false" text="Enable Vander Waal's Equation" wrapText="true">
+                     <font>
+                        <Font name="Comic Sans MS" size="12.0" />
+                     </font></CheckBox>
                </children>
             </HBox>
             <HBox id="startSimulationContainer" fx:id="startSimulationContainer" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button id="playBackBtn" fx:id="playBackBtn" text="Start Simulation" />
+                  <Button id="playBackBtn" fx:id="playBackBtn" prefHeight="41.0" prefWidth="183.0" style="-fx-background-color: lightgreen; -fx-font-style: &quot;Comic Sans&quot;;" text="Start Simulation">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <DropShadow />
+                     </effect></Button>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </HBox>
          </children>
       </VBox>
    </right>
    <top>
-      <Label id="topHeaderLabel" fx:id="topHeaderLabel" text="Gas Laws Simulation" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+      <Label id="topHeaderLabel" fx:id="topHeaderLabel" style="-fx-min-height: 45; -fx-font-style: &quot;Comic Sans&quot;;" text="Gas Laws Simulation" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <font>
+            <Font name="Comic Sans MS" size="18.0" />
+         </font></Label>
    </top>
 
 </BorderPane>

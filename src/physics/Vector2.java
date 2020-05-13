@@ -9,6 +9,7 @@ public class Vector2 {
         this.x = 0.0;
         this.y = 0.0;
     }
+
     /**
      * Instance of Vector2
      * @param x, x component of vector
@@ -30,6 +31,15 @@ public class Vector2 {
             this.x *= s;
             this.y *= s;
         }
+    }
+    public void invert(){
+        double temp = this.x;
+        this.x  = this.y;
+        this.y = this.x;
+    }
+    public void negate(){
+        this.x *= -1;
+        this.y *= -1;
     }
 
     /* STATIC METHODS */
@@ -62,5 +72,14 @@ public class Vector2 {
     }
     public void setY(double y) {
         this.y = y;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Vector2{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

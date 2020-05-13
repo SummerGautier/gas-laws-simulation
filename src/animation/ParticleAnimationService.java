@@ -37,7 +37,7 @@ public class ParticleAnimationService{
         //init starting position of particles
         particleSystem.init(animationPane.getWidth(), animationPane.getHeight());
         animationPane.getChildren().addAll(particleSystem.getParticles());
-
+ 
         //set animation loop to run continuously (unless we call timeline.stop())
         timeline.setCycleCount(Timeline.INDEFINITE);
 

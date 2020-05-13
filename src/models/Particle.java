@@ -90,6 +90,20 @@ public class Particle extends Circle {
         this.setFill(color);
     }
 
+    /* Other */
+    public void negatePos(){
+        this.setCenterX(this.getCenterX() * -1);
+        this.setCenterY(this.getCenterY() * -1);
+    }
+    public void invertVelocity(){
+        this.velocity.invert();
+    }
+    public void negateVelocity(){
+        this.velocity.negate();
+    }
+    public void negateXVelocity(){this.velocity.setX(this.getXVelocity() *-1);}
+    public void negateYVelocity(){this.velocity.setY(this.getYVelocity() *-1);}
+
 
     /**
      * JSON of info about the particle
