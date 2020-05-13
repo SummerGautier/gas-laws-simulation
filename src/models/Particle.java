@@ -65,7 +65,9 @@ public class Particle extends Circle {
     public double getYVelocity(){
         return this.yVelocity;
     }
-    public double getVelocity(){ return Math.sqrt(Math.pow(this.getXVelocity(), 2) + Math.pow(this.getYVelocity(),2));}
+    public double getVelocity(){
+        return Math.sqrt(Math.pow(this.getXVelocity(), 2) + Math.pow(this.getYVelocity(),2));
+    }
     public Paint getColor(){
         return this.getFill();
     }

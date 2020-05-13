@@ -1,5 +1,6 @@
 package models;
 
+import com.sun.javafx.geom.Vec2d;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -174,15 +175,13 @@ public abstract class ParticleSystem {
             //detect particle collision
             detectParticleCollision(particle, this.particles);
 
-            /*
-                TODO: Combine intra-particle collisions with bounds
-             */
+
+            //detect bounds collisions
+            detectBoundsCollision(particle, xBounds, yBounds);
             //particle collision detection
             particle.setXPos(particle.getXPos() + particle.getXVelocity());
             particle.setYPos(particle.getYPos() + particle.getYVelocity());
 
-            //detect bounds collisions
-            detectBoundsCollision(particle, xBounds, yBounds);
 
         }
     }
@@ -205,54 +204,27 @@ public abstract class ParticleSystem {
             particle.setYVelocity(particle.getYVelocity() * -1);
         }
     }
+
+    /**
+     * Detect if collision between particles
+     * @param particle, particle to compare
+     * @param particles, list of possible colliding particles
+     */
     private void detectParticleCollision(Particle particle, ArrayList<Particle> particles){
         particleIterator = particles.listIterator();
         while(particleIterator.hasNext()){
             Particle otherParticle = particleIterator.next();
-            if(Math.pow((otherParticle.getCenterX()-particle.getCenterX()),2) + Math.pow((particle.getCenterY()-otherParticle.getCenterY()),2) <= Math.pow(particle.getRadius()+otherParticle.getRadius(),2)){
-                adjustVelocityPostCollision(particle, otherParticle);
+            if(Math.pow((otherParticle.getCenterX()-particle.getCenterX()),2) + Math.pow((otherParticle.getCenterY()-particle.getCenterY()),2) <= Math.pow(particle.getRadius()+otherParticle.getRadius(),2)){
+                particle.setXVelocity(particle.getXVelocity() * -1);
+                particle.setYVelocity(particle.getYVelocity() * -1);
+
+                otherParticle.setXVelocity(otherParticle.getXVelocity() * -1);
+                otherParticle.setYVelocity(otherParticle.getYVelocity() * -1);
+
             }
         }
     }
 
-    private void adjustVelocityPostCollision(Particle particle1, Particle particle2){
-        /*
-            EQUATION REFERENCE: https://williamecraver.wixsite.com/elastic-equations
-            ALSO SEE: https://en.wikipedia.org/wiki/Elastic_collision
-         */
-        /*
-            TODO: calculate PHI and incorporate multi-point collision
-         */
-        //mass
-        double m1 = particle1.getWeight();
-        double m2 = particle2.getWeight();
-        //velocity
-        double v1 = particle1.getVelocity();
-        double v2 = particle2.getVelocity();
-        //angles
-        double theta1 = Math.acos(particle1.getXVelocity()/particle1.getVelocity());
-        double theta2 = Math.acos(particle2.getXVelocity()/particle2.getVelocity());
-        double phi = -0.5;
-        //rotated velocities
-        double v1Xr = v1*cos(theta1-phi);
-        double v1Yr = v1*sin(theta1-phi);
-        double v2Xr = v2*cos(theta2-phi);
-        double v2Yr = v2*sin(theta2-phi);
-        //solved ROTATED x components of velocity in collision equation
-        double v1FXr = ((v1Xr)*(m1-m2)+(2*m2*v2Xr))/(m1+m2);
-        double v2FXr = ((v2Xr)*(m2-m1)+(2*m1*v1Xr))/(m1+m2);
-        //final UN-ROTATED x and y components of velocity in collision equation
-        double v1FX = (v1FXr*cos(phi)) + (v1Yr*cos(phi+(PI/2)));
-        double v1FY = (v1FXr*sin(phi)) + (v1Yr*sin(phi+(PI/2)));
-        double v2FX = (v2FXr*cos(phi)) + (v2Yr*cos(phi+(PI/2)));
-        double v2FY = (v2FXr*sin(phi)) + (v2Yr*sin(phi+(PI/2)));
-
-        //set new x and y velocity of particles
-        particle1.setXVelocity(v1FX);
-        particle1.setYVelocity(v1FY);
-        particle2.setXVelocity(v2FX);
-        particle2.setYVelocity(v2FY);
-    }
 
 
     /* BUSINESS METHODS */
