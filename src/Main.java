@@ -12,7 +12,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
         primaryStage.setTitle("Gas Laws Interactive Simulation v1.0");
         primaryStage.setScene(new Scene(root, 1200, 800));
-        primaryStage.setResizable(false);
+
         primaryStage.show();
 
     }

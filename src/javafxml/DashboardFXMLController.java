@@ -21,6 +21,7 @@ public class DashboardFXMLController implements Initializable {
     private ParticleAnimationService particleAnimationService;
     private IdealParticleSystem idealParticleSystem;
     private VanderWaalsParticleSystem vanderWaalsParticleSystem;
+    private ParticleSystem particleSystem;
     private enum PlayBackStatus { STARTED, STOPPED}
 
     @FXML private Button playBackBtn;
@@ -50,8 +51,8 @@ public class DashboardFXMLController implements Initializable {
     @FXML
     public void startSimulation(){
         //instantiate correct particle system with the proper number of particles
-        ParticleSystem particleSystem = (enableVanderWaalCheckBox.isSelected())? vanderWaalsParticleSystem : idealParticleSystem;
-        particleSystem.setSize (150);
+        particleSystem = (enableVanderWaalCheckBox.isSelected())? vanderWaalsParticleSystem : idealParticleSystem;
+        particleSystem.setNumberOfParticles(150);
         //use animation service to start particle animation
         particleAnimationService.animate(particleSystem, this.animationPane);
         //update status of play button
@@ -66,6 +67,7 @@ public class DashboardFXMLController implements Initializable {
     public void stopSimulation(){
         //stop animation
         particleAnimationService.stopAnimation(this.animationPane);
+        System.out.println(particleSystem.getParticles().size());
         //update status of play button
         this.playBackBtn.setUserData(PlayBackStatus.STOPPED);
         this.playBackBtn.setStyle("-fx-background-color: lightgreen");

@@ -19,12 +19,13 @@ public abstract class ParticleSystem {
     protected double moles;
 
     protected Color color;
+    protected Color strokeColor;
 
     protected ListIterator<Particle> particleIterator;
     protected ArrayList<Particle> particles;
 
     private final Random random;
-    private final int MAX_PARTICLES = 500;
+    private final int MAX_PARTICLES = 300;
 
 
 
@@ -35,6 +36,7 @@ public abstract class ParticleSystem {
         this.particles = new ArrayList<Particle>();
         this.random = new Random();
         this.color = Color.RED;
+        this.strokeColor = Color.BLACK;
         this.volume = 1;
         this.temperature = 1;
         this.pressure = 1;
@@ -46,17 +48,17 @@ public abstract class ParticleSystem {
     public void init(double xBounds, double yBounds){
         //init particle pos, speed, color etc.
         for(Particle particle : this.particles) {
-            particle.setWeight(9);
+            particle.setWeight(10);
             particle.setColor(this.color);
-            //particle.setStroke(Color.GHOSTWHITE);
-            particle.setStroke(Color.BLACK);
+            particle.setStroke(this.strokeColor);
             particle.setVelocity(new Vector2(1,1));
-/*            DropShadow particleShadow = new DropShadow();
+            //Coool shadow effect! (gives the particles depth)
+            DropShadow particleShadow = new DropShadow();
             particleShadow.setRadius(particle.getRadius());
             particleShadow.setOffsetX(1);
             particleShadow.setOffsetY(1);
             particle.setEffect(particleShadow);
-            particle.setCache(true);*/
+            particle.setCache(true);
 
             particle.setXPos(random.nextInt((int) (xBounds - 2 * particle.getRadius())) + particle.getRadius());
             particle.setYPos(random.nextInt((int) (yBounds - 2 * particle.getRadius())) + particle.getRadius());
@@ -214,7 +216,7 @@ public abstract class ParticleSystem {
      * Sets the size of the particles[] array to the specified number
      * @param numberOfParticles, total number of particles that should be in the system
      */
-    public void setSize(int numberOfParticles){
+    public void setNumberOfParticles(int numberOfParticles){
         //if greater than max size, do nothing
         if(numberOfParticles > MAX_PARTICLES){ return; }
         //if less than size of particles[], subtract difference from particles

@@ -81,6 +81,7 @@ public class Particle extends Circle {
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
     }
+    public void setVelocity(double x, double y){ this.velocity.setX(x); this.velocity.setY(y);}
     //weight
     public void setWeight(double weight) {
         this.setRadius(weight);

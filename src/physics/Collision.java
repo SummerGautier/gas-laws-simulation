@@ -6,6 +6,7 @@ import models.Particle;
  * About: This class handles all collision-centered logic
  */
 public abstract class Collision {
+
     public static boolean isColliding(Particle particle1, Particle particle2){
         if(Vector2.distance(particle1.getPosVector(), particle2.getPosVector()) <= particle1.getRadius()+particle2.getRadius()){
             return true;

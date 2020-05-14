@@ -34,10 +34,11 @@ public class ParticleAnimationService{
      * @param animationPane, the pane where the animation will be drawn
      */
     public void animate(ParticleSystem particleSystem, Pane animationPane){
+        timeline.getKeyFrames().clear();
         //init starting position of particles
         particleSystem.init(animationPane.getWidth(), animationPane.getHeight());
         animationPane.getChildren().addAll(particleSystem.getParticles());
- 
+
         //set animation loop to run continuously (unless we call timeline.stop())
         timeline.setCycleCount(Timeline.INDEFINITE);
 
@@ -47,11 +48,9 @@ public class ParticleAnimationService{
                 particleSystem.updateParticlePositions(animationPane.getWidth(), animationPane.getHeight());
             }
         );
-
-        //add key frame to simulation loop
         timeline.getKeyFrames().add(kf);
         //begin simulation loop
-        timeline.play();
+        timeline.playFromStart();
 
     }
 

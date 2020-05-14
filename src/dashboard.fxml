@@ -30,7 +30,7 @@
             </HBox>
             <HBox id="startSimulationContainer" fx:id="startSimulationContainer" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button id="playBackBtn" fx:id="playBackBtn" prefHeight="41.0" prefWidth="183.0" style="-fx-background-color: lightgreen; -fx-font-style: &quot;Comic Sans&quot;;" text="Start Simulation">
+                  <Button id="playBackBtn" fx:id="playBackBtn" prefHeight="41.0" prefWidth="183.0" style="-fx-background-color: lightgreen; -fx-font-style: 'Comic Sans';" text="Start Simulation">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
@@ -46,7 +46,7 @@
       </VBox>
    </right>
    <top>
-      <Label id="topHeaderLabel" fx:id="topHeaderLabel" style="-fx-min-height: 45; -fx-font-style: &quot;Comic Sans&quot;;" text="Gas Laws Simulation" textAlignment="CENTER" BorderPane.alignment="CENTER">
+      <Label id="topHeaderLabel" fx:id="topHeaderLabel" style="-fx-min-height: 45; -fx-font-style: 'Comic Sans';" text="Gas Laws Simulation" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
