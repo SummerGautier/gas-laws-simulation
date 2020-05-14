@@ -31,8 +31,8 @@ public abstract class Collision {
         Vector2 velocityComponentOnTangent = Vector2.multiply(tangentVector, length);
         //substracting parallel component veloicty from the relative velocity gives us the perpendicular component
         Vector2 velocityComponentPerpendicularToTangent = Vector2.subtract(relativeVelocity, velocityComponentOnTangent);
+        
         //adjust particle velocities
-
         //particle 1
         particle1.setXVelocity(particle1.getXVelocity() - velocityComponentPerpendicularToTangent.getX());
         particle1.setYVelocity(particle1.getYVelocity() - velocityComponentPerpendicularToTangent.getY());

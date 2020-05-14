@@ -67,7 +67,6 @@ public class DashboardFXMLController implements Initializable {
     public void stopSimulation(){
         //stop animation
         particleAnimationService.stopAnimation(this.animationPane);
-        System.out.println(particleSystem.getParticles().size());
         //update status of play button
         this.playBackBtn.setUserData(PlayBackStatus.STOPPED);
         this.playBackBtn.setStyle("-fx-background-color: lightgreen");
